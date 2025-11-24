@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>👥 Все сотрудники</h1>
+    <div>
+        <a href="/employees/create/" class="btn btn-success me-2">
+            👤 Добавить сотрудника
+        </a>
+        <a href="/" class="btn btn-secondary">← На главную</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Сотрудник</th>
+                <th>Должность</th>
+                <th>Отдел</th>
+                <th>Задач</th>
+                <th>Навыки</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td><strong>{{ employee.employee_code }}</strong></td>
+                <td>
+                    <strong>{{ employee.first_name }} {{ employee.last_name }}</strong>
+                </td>
+                <td>{{ employee.position }}</td>
+                <td>{{ employee.department }}</td>
+                <td>
+                    <span class="badge bg-primary">{{ employee.task_count }}</span>
+                </td>
+                <td>
+                    <small>{{ employee.skills|default:"Нет навыков" }}</small>
+                </td>
+                <td>
+                    <a href="/employees/{{ employee.id }}/" class="btn btn-sm btn-outline-primary">👁️</a>
+                    <form method="POST" action="/employees/{{ employee.id }}/delete/" class="d-inline"
+                          onsubmit="return confirm('Удалить сотрудника {{ employee.first_name }} {{ employee.last_name }}?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

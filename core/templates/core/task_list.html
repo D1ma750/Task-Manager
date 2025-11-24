@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📋 Все задачи</h1>
+    <div>
+        <a href="/tasks/create/" class="btn btn-success me-2">
+            ➕ Создать задачу
+        </a>
+        <a href="/" class="btn btn-secondary">← На главную</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Название</th>
+                <th>Статус</th>
+                <th>Приоритет</th>
+                <th>Срок</th>
+                <th>Сотрудников</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td><strong>{{ task.task_code }}</strong></td>
+                <td>{{ task.title }}</td>
+                <td>
+                    <span class="badge
+                        {% if task.status == 'done' %}bg-success
+                        {% elif task.status == 'in_progress' %}bg-primary
+                        {% elif task.status == 'review' %}bg-warning
+                        {% else %}bg-secondary{% endif %}">
+                        {{ task.status }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge
+                        {% if task.priority == 'high' %}bg-danger
+                        {% elif task.priority == 'medium' %}bg-warning
+                        {% else %}bg-info{% endif %}">
+                        {{ task.priority }}
+                    </span>
+                </td>
+                <td>{{ task.due_date }}</td>
+                <td>
+                    <span class="badge bg-dark">{{ task.employee_count }}</span>
+                </td>
+                <td>
+                    <a href="/tasks/{{ task.id }}/" class="btn btn-sm btn-outline-primary">👁️</a>
+                    <form method="POST" action="/tasks/{{ task.id }}/delete/" class="d-inline"
+                          onsubmit="return confirm('Удалить задачу «{{ task.title }}»?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

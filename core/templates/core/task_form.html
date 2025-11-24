@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📝 Создать новую задачу</h1>
+    <a href="/tasks/" class="btn btn-secondary">← Назад к списку</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Код задачи *</label>
+                        <input type="text" class="form-control" name="task_code" required
+                               placeholder="Например: TASK-001">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Название задачи *</label>
+                        <input type="text" class="form-control" name="title" required
+                               placeholder="Краткое описание задачи">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Проект *</label>
+                        <input type="text" class="form-control" name="project_name" required
+                               placeholder="Название проекта">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Приоритет</label>
+                        <select class="form-select" name="priority">
+                            <option value="low">🔵 Низкий</option>
+                            <option value="medium" selected>🟡 Средний</option>
+                            <option value="high">🔴 Высокий</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Срок выполнения *</label>
+                        <input type="date" class="form-control" name="due_date" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Статус</label>
+                        <select class="form-select" name="status">
+                            <option value="todo">⏳ К выполнению</option>
+                            <option value="in_progress">🔄 В работе</option>
+                            <option value="review">👀 На проверке</option>
+                            <option value="done">✅ Выполнено</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Требуемые навыки</label>
+                <textarea class="form-control" name="required_skills" rows="2"
+                          placeholder="Python, Django, SQL, JavaScript..."></textarea>
+                <div class="form-text">Перечислите навыки через запятую</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Описание задачи</label>
+                <textarea class="form-control" name="description" rows="4"
+                          placeholder="Подробное описание задачи..."></textarea>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">✅ Создать задачу</button>
+                <a href="/tasks/" class="btn btn-outline-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

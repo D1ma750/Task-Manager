@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📊 Task Manager Dashboard</h1>
+    <div>
+        <a href="/tasks/create/" class="btn btn-success me-2">➕ Задача</a>
+        <a href="/employees/create/" class="btn btn-primary">👤 Сотрудник</a>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Сотрудников</h5>
+                <h2>{{ stats.total_employees }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Всего задач</h5>
+                <h2>{{ stats.total_tasks }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Активных задач</h5>
+                <h2>{{ stats.active_tasks }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="/tasks/" class="btn btn-primary">📋 Перейти к списку задач</a>
+</div>
+{% endblock %}

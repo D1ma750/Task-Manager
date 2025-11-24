@@ -1,0 +1,158 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>👤 Профиль сотрудника</h1>
+    <a href="/employees/" class="btn btn-secondary">← Назад к списку</a>
+</div>
+
+<!-- Основная информация -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>{{ employee.first_name }} {{ employee.last_name }}</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Код сотрудника:</strong> {{ employee.employee_code }}</p>
+                <p><strong>Должность:</strong> {{ employee.position }}</p>
+                <p><strong>Отдел:</strong> {{ employee.department }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Email:</strong> {{ employee.email }}</p>
+                <p><strong>Всего задач:</strong> <span class="badge bg-primary">{{ tasks|length }}</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Навыки сотрудника -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>💼 Навыки ({{ skills|length }})</h5>
+        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addSkillModal">
+            ➕ Добавить навык
+        </button>
+    </div>
+    <div class="card-body">
+        {% if skills %}
+            <div class="row">
+                {% for skill in skills %}
+                <div class="col-md-4 mb-3">
+                    <div class="p-3 border rounded position-relative">
+                        <strong>{{ skill.skill_name }}</strong>
+                        <br>
+                        <small class="text-muted">
+                            Уровень:
+                            <span class="badge
+                                {% if skill.skill_level == 'expert' %}bg-success
+                                {% elif skill.skill_level == 'intermediate' %}bg-warning
+                                {% else %}bg-secondary{% endif %}">
+                                {{ skill.skill_level }}
+                            </span>
+                        </small>
+                        <form method="POST" action="/skill/{{ skill.id }}/delete/" class="d-inline"
+                              onsubmit="return confirm('Удалить навык «{{ skill.skill_name }}»?')">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-1"
+                                    title="Удалить навык">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">Навыки не указаны</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Задачи сотрудника -->
+<div class="card">
+    <div class="card-header">
+        <h5>📋 Задачи ({{ tasks|length }})</h5>
+    </div>
+    <div class="card-body">
+        {% if tasks %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Код</th>
+                            <th>Задача</th>
+                            <th>Статус</th>
+                            <th>Приоритет</th>
+                            <th>Срок</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td><strong>{{ task.task_code }}</strong></td>
+                            <td>
+                                <a href="/tasks/{{ task.id }}/">{{ task.title }}</a>
+                            </td>
+                            <td>
+                                <span class="badge
+                                    {% if task.status == 'done' %}bg-success
+                                    {% elif task.status == 'in_progress' %}bg-primary
+                                    {% elif task.status == 'review' %}bg-warning
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ task.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge
+                                    {% if task.priority == 'high' %}bg-danger
+                                    {% elif task.priority == 'medium' %}bg-warning
+                                    {% else %}bg-info{% endif %}">
+                                    {{ task.priority }}
+                                </span>
+                            </td>
+                            <td>{{ task.due_date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">Задачи не назначены</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Модальное окно для добавления навыка -->
+<div class="modal fade" id="addSkillModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">➕ Добавить навык</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="/skill/add/">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="employee_id" value="{{ employee.id }}">
+                    <div class="mb-3">
+                        <label class="form-label">Название навыка</label>
+                        <input type="text" class="form-control" name="skill_name" required
+                               placeholder="Python, SQL, JavaScript...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Уровень владения</label>
+                        <select class="form-select" name="skill_level" required>
+                            <option value="beginner">👶 Начальный</option>
+                            <option value="intermediate" selected>👨‍💻 Средний</option>
+                            <option value="expert">👑 Эксперт</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-success">✅ Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

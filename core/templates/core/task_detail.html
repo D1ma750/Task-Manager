@@ -1,0 +1,133 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📋 Детали задачи</h1>
+    <a href="/tasks/" class="btn btn-secondary">← Назад к списку</a>
+</div>
+
+<!-- Информация о задаче -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>{{ task.title }}</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Код задачи:</strong> {{ task.task_code }}</p>
+                <p><strong>Проект:</strong> {{ task.project_name }}</p>
+                <p><strong>Статус:</strong>
+                    <span class="badge
+                        {% if task.status == 'done' %}bg-success
+                        {% elif task.status == 'in_progress' %}bg-primary
+                        {% elif task.status == 'review' %}bg-warning
+                        {% else %}bg-secondary{% endif %}">
+                        {{ task.status }}
+                    </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Приоритет:</strong>
+                    <span class="badge
+                        {% if task.priority == 'high' %}bg-danger
+                        {% elif task.priority == 'medium' %}bg-warning
+                        {% else %}bg-info{% endif %}">
+                        {{ task.priority }}
+                    </span>
+                </p>
+                <p><strong>Срок выполнения:</strong> {{ task.due_date }}</p>
+                <p><strong>Требуемые навыки:</strong> {{ task.required_skills }}</p>
+            </div>
+        </div>
+        {% if task.description %}
+        <div class="mt-3">
+            <strong>Описание:</strong>
+            <p>{{ task.description }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Назначенные сотрудники -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>👥 Назначенные сотрудники ({{ assigned_employees|length }})</h5>
+        <div>
+            <small class="text-muted">Статус задачи:</small>
+            <div class="btn-group ms-2">
+                <a href="/update-status/{{ task.id }}/todo/"
+                   class="btn btn-sm {% if task.status == 'todo' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+                    К выполнению
+                </a>
+                <a href="/update-status/{{ task.id }}/in_progress/"
+                   class="btn btn-sm {% if task.status == 'in_progress' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    В работе
+                </a>
+                <a href="/update-status/{{ task.id }}/review/"
+                   class="btn btn-sm {% if task.status == 'review' %}btn-info{% else %}btn-outline-info{% endif %}">
+                    На проверке
+                </a>
+                <a href="/update-status/{{ task.id }}/done/"
+                   class="btn btn-sm {% if task.status == 'done' %}btn-success{% else %}btn-outline-success{% endif %}">
+                    Выполнено
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if assigned_employees %}
+            {% for emp in assigned_employees %}
+            <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                <div>
+                    <strong>{{ emp.first_name }} {{ emp.last_name }}</strong>
+                    <br>
+                    <small class="text-muted">{{ emp.position }}</small>
+                </div>
+                <a href="/remove/{{ task.id }}/{{ emp.id }}/"
+                   class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Убрать сотрудника с задачи?')">
+                    Убрать
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Сотрудники не назначены</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Рекомендованные сотрудники -->
+<div class="card">
+    <div class="card-header">
+        <h5>🎯 Рекомендованные сотрудники</h5>
+    </div>
+    <div class="card-body">
+        {% if suggested_candidates %}
+            {% for candidate in suggested_candidates %}
+            <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+                <div class="flex-grow-1">
+                    <strong>{{ candidate.emp_name }}</strong>
+                    <br>
+                    <small class="text-muted">
+                        Задач: <span class="badge bg-primary">{{ candidate.task_count }}</span>
+                    </small>
+                    <div class="mt-1">
+                         {% for skill in candidate.skills %}
+                         <span class="badge {{ skill.badge_class }} me-1 mb-1">
+                            {{ skill.name }}:{{ skill.level }}
+                         </span>
+                         {% endfor %}
+                    </div>
+                </div>
+                <a href="/assign/{{ task.id }}/{{ candidate.emp_id }}/"
+                   class="btn btn-sm btn-outline-success ms-3">
+                    Назначить
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">Нет сотрудников с подходящими навыками</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
