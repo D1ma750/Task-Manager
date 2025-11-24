@@ -15,7 +15,7 @@ class Employee(models.Model):
         return f"{self.first_name} {self.last_name}"
 
     class Meta:
-        db_table = 'employees'  # ← используем существующую таблицу
+        db_table = 'employees'
 
 class Task(models.Model):
     task_code = models.CharField(max_length=50, unique=True)
@@ -33,7 +33,7 @@ class Task(models.Model):
         return f"{self.task_code}: {self.title}"
 
     class Meta:
-        db_table = 'tasks'  # ← используем существующую таблицу
+        db_table = 'tasks'
 
 class EmployeeSkill(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -44,7 +44,7 @@ class EmployeeSkill(models.Model):
         return f"{self.employee} - {self.skill_name}"
 
     class Meta:
-        db_table = 'employee_skills'  # ← используем существующую таблицу
+        db_table = 'employee_skills'
 
 class EmployeeTask(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -55,4 +55,4 @@ class EmployeeTask(models.Model):
         return f"{self.employee} -> {self.task}"
 
     class Meta:
-        db_table = 'employee_tasks'  # ← используем существующую таблицу
+        db_table = 'employee_tasks'

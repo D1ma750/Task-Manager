@@ -1,12 +1,8 @@
 from django.urls import path
 from . import views
-from django.http import HttpResponse
 
-def test_view(request):
-    return HttpResponse("Тестовая страница работает!")
 
 urlpatterns = [
-    path('test/', test_view),
     path('', views.index, name='index'),
     path('tasks/', views.task_list, name='task_list'),
     path('tasks/create/', views.task_create, name = 'task_create'),
