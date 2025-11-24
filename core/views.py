@@ -337,7 +337,7 @@ def employee_delete(request, employee_id):
 
 
 def skill_delete(request, employee_id, skill_name):
-    """Удаление навыка по сотруднику и названию"""
+    """Удаление навыка"""
     if request.method == 'POST':
         with connection.cursor() as cursor:
             cursor.execute("DELETE FROM employee_skills WHERE employee_id = %s AND skill_name = %s",
