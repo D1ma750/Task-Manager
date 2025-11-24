@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'task_manager_web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # имя твоей базы в DBeaver
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': '220105',  # пароль от PostgreSQL
+        'PASSWORD': '220105',
         'HOST': 'localhost',
         'PORT': '5432',
     }
