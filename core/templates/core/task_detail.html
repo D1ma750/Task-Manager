@@ -32,10 +32,10 @@
                         {% if task.priority == 'high' %}bg-danger
                         {% elif task.priority == 'medium' %}bg-warning
                         {% else %}bg-info{% endif %}">
-                        {{ task.priority }}
+                        {{task.priority}}
                     </span>
                 </p>
-                <p><strong>Срок выполнения:</strong> {{ task.due_date }}</p>
+                <p><strong>Срок выполнения:</strong> {{task.due_date}}</p>
                 <p><strong>Требуемые навыки:</strong> {{ task.required_skills }}</p>
             </div>
         </div>

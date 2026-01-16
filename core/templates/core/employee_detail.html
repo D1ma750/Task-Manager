@@ -6,7 +6,6 @@
     <a href="/employees/" class="btn btn-secondary">← Назад к списку</a>
 </div>
 
-<!-- Основная информация -->
 <div class="card mb-4">
     <div class="card-header">
         <h4>{{ employee.first_name }} {{ employee.last_name }}</h4>
@@ -26,7 +25,6 @@
     </div>
 </div>
 
-<!-- Навыки сотрудника -->
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5>💼 Навыки ({{ skills|length }})</h5>
@@ -51,7 +49,7 @@
                                 {{ skill.skill_level }}
                             </span>
                         </small>
-                        <form method="POST" action="/skill/{{ skill.id }}/delete/" class="d-inline"
+                        <form method="POST" action="/skill/{{ employee.id }}/{{ skill.skill_name }}/delete/" class="d-inline"
                               onsubmit="return confirm('Удалить навык «{{ skill.skill_name }}»?')">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-1"
@@ -67,7 +65,6 @@
     </div>
 </div>
 
-<!-- Задачи сотрудника -->
 <div class="card">
     <div class="card-header">
         <h5>📋 Задачи ({{ tasks|length }})</h5>
@@ -121,7 +118,6 @@
     </div>
 </div>
 
-<!-- Модальное окно для добавления навыка -->
 <div class="modal fade" id="addSkillModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
